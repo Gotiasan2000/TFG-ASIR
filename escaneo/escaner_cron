@@ -1,0 +1,1 @@
+*/15 * * * * root /root/ejecutar_escaner.sh >> /var/log/escaner.log 2>&1

@@ -1,0 +1,1 @@
+*/15 * * * * root /root/ejecutar_ids.sh >> /var/log/ids.log 2>&1

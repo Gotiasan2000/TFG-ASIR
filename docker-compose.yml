@@ -1,0 +1,72 @@
+services:
+
+  ids:
+    build: ./ids
+    networks:
+      red_externa:
+        ipv4_address: 172.21.0.10
+      red_corporativa:
+        ipv4_address: 172.20.0.10
+    environment:
+      - IFACE=eth0
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    sysctls:
+      net.ipv4.ip_forward: "1"
+
+  escaneo:
+    build: ./escaneo
+    networks:
+      red_corporativa:
+        ipv4_address: 172.20.0.20
+
+  servidor_vulnerable:
+    build: ./servidor_vulnerable
+    cap_add:
+      - NET_ADMIN
+    networks:
+      red_corporativa:
+        ipv4_address: 172.20.0.30
+
+  cliente:
+    build: ./cliente
+    tty: true
+    stdin_open: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      red_externa:
+        ipv4_address: 172.21.0.40
+
+  panel_web:
+    build: ./panel_web
+    ports:
+      - "5000:5000"
+    networks:
+      red_corporativa:
+        ipv4_address: 172.20.0.50
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: seguridad_red
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      red_corporativa:
+        ipv4_address: 172.20.0.60
+
+networks:
+  red_corporativa:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+  red_externa:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24

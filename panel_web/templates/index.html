@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Seguridad</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+    <div class="contenedor">
+        <h1>Panel de Seguridad en Red</h1>
+        <div class="menu">
+            <a href="{{ url_for('vulnerabilidades') }}">Ver Vulnerabilidades</a>
+            <a href="{{ url_for('alertas') }}">Ver Alertas</a>
+        </div>
+    </div>
+</body>
+</html>
